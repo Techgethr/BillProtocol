@@ -1,0 +1,50 @@
+﻿@model BillProtocol.Models.SettingsModel.IndexSettingsViewModel
+@{
+    ViewData["Title"] = "Manage your account";
+}
+
+
+
+<div class="row">
+    <div class="col-12">
+        <h2>@ViewData["Title"]</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+            @if(Model.UserInfo != null)
+            {
+                <h3>Personal/Company Information</h3>
+                <p class="alert alert-info">
+                    @(Model.UserInfo.FirstName+" "+Model.UserInfo.LastName) <br />
+                    @Model.UserInfo.TaxId <br />
+                    @Model.UserInfo.AddressLine1 <br />
+                    @Model.UserInfo.AddressLine2 <br />
+                    @(Model.UserInfo.AddressCity+", "+@Model.UserInfo.AddressState+", "+Model.UserInfo.Country.Name) (postal code: @Model.UserInfo.AddressPostalCode) <br />
+                </p>
+
+            }
+            else
+            {
+                <p class="alert alert-info">
+                    You have not updated your personal and business information to create invoices.
+                </p>
+            }
+            @Html.ActionLink("Manage personal/company info","UserInfo","Settings",null, new {@class="btn btn-success"})
+    </div>
+    <div class="col-4">
+                <h3>Wallets</h3>
+                <p class="alert alert-info">
+                    You have @Model.WalletCount registered wallets. <br />
+                </p>
+                @Html.ActionLink("Manage wallets","MyWallets","Settings",null, new {@class="btn btn-success"})
+    </div>
+    <div class="col-4">
+                <h3>Destinations for invoices</h3>
+                <p class="alert alert-info">
+                    You have @Model.DestinationCount registered destinations for your invoices. <br />
+                </p>
+                @Html.ActionLink("Manage destinations","MyDestinations","Settings",null, new {@class="btn btn-success"})
+    </div>
+</div>

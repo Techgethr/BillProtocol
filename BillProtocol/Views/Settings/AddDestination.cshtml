@@ -1,0 +1,51 @@
+﻿@model BillProtocol.Models.SettingsModel.AddDestinationViewModel
+@{
+    ViewData["Title"] = "Add a new destination";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>@ViewData["Title"]</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-info">
+            Add a new destination to your account to send it invoices.
+        </div>
+    </div>
+</div>
+
+
+@using(Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.Name)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.Name, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.Name)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.Address)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.Address, new {@class="form-control", type="email"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.Address)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5">
+            <br />
+        </div>
+        <div class="col-5">
+            <input type="submit" value="Add destination" class="btn btn-primary" />
+        </div>
+    </div>
+}

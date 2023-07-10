@@ -1,0 +1,131 @@
+﻿@model BillProtocol.Models.SettingsModel.UserInfoViewModel
+@{
+    ViewData["Title"] = "Update your personal and company information.";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>@ViewData["Title"]</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-info">
+            Update the following information to be able to create and send invoices to receive payments.
+        </div>
+    </div>
+</div>
+
+
+@using(Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.FirstName)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.FirstName, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.FirstName)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.LastName)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.LastName, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.LastName)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.CompanyName) (optional)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.CompanyName, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.CompanyName)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.AddressLine1)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.AddressLine1, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.AddressLine1)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.AddressLine2) (optional)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.AddressLine2, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.AddressLine2)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.AddressCity)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.AddressCity, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.AddressCity)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.AddressState) (optional)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.AddressState, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.AddressState)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.CountryId)
+        </div>
+        <div class="col-5">
+            @Html.DropDownListFor(x=> x.Form.CountryId, Model.Countries, "Select the country", new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.AddressCity)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.AddressPostalCode)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.AddressPostalCode, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.AddressPostalCode)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.TaxId)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.TaxId, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.TaxId)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5">
+            <br />
+        </div>
+        <div class="col-5">
+            <input type="submit" value="Update profile" class="btn btn-primary" />
+        </div>
+    </div>
+}

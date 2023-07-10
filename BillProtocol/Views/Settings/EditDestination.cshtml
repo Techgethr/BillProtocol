@@ -1,0 +1,52 @@
+﻿@model BillProtocol.Models.SettingsModel.EditDestinationViewModel
+@{
+    ViewData["Title"] = "Update destination";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>@ViewData["Title"]</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-info">
+            Update the data of the destination if not corresponding.
+        </div>
+    </div>
+</div>
+
+
+@using(Html.BeginForm())
+{
+    @Html.HiddenFor(x=> x.Form.Id)
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.Name)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.Name, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.Name)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            @Html.LabelFor(x=> x.Form.Address)
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x=> x.Form.Address, new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.Address)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5">
+            <br />
+        </div>
+        <div class="col-5">
+            <input type="submit" value="Update destination" class="btn btn-primary" />
+        </div>
+    </div>
+}

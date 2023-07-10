@@ -1,0 +1,58 @@
+﻿@model BillProtocol.Models.SettingsModel.MyDestinationsViewModel
+@{
+    ViewData["Title"] = "Manage your destinations/clients";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>@ViewData["Title"]</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        @Html.ActionLink("Add new destination","AddDestination","Settings",null, new {@class="btn btn-success"})
+    </div>
+</div>
+
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Creation date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.Destinations.Any())
+        {
+            foreach(var wallet in Model.Destinations)
+            {
+                <tr>
+                    <th>@wallet.Name</th>
+                    <td>@wallet.Address</td>
+                    <td>@wallet.CreatedAt</td>
+                    <td>@Html.ActionLink("Update","EditDestination","Settings", new {id = wallet.Id}, new {@class = "btn btn-secondary"})</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">You don't have any destination.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<br />
+<div class="row">
+    <div class="col-12">
+        @Html.ActionLink("Add new destination","AddDestination","Settings",null, new {@class="btn btn-success"})
+    </div>
+</div>

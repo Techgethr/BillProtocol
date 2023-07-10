@@ -1,0 +1,51 @@
+﻿@model BillProtocol.Models.RequestModel.IndexRequestViewModel
+@{
+    ViewData["Title"] = "My Requests";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        @Html.ActionLink("Create invoice","CreateSelector","Request",null,new {@class="btn btn-info"})
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Creation date</th>
+                    <th>Payment date</th>
+                    <th>Total amount (currency)</th>
+                    <th>Destination</th>
+                    <th>Wallet</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(Model.Invoices.Any())
+                {
+                    foreach(var invoice in Model.Invoices)
+                    {
+                        <tr>
+                            <td>@invoice.CreatedAt</td>
+                            <td>@invoice.PaymentDate</td>
+                            <td>@invoice.TotalAmount (@invoice.Currency.Code)</td>
+                            <td>@invoice.Destination.Name</td>
+                            <td>@invoice.Wallet.Name</td>
+                            <td>@invoice.InvoiceStatus.Name</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">You have no invoices created.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+    </div>
+</div>

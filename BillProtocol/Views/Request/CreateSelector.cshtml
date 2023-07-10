@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "Select the type of invoice";
+}
+
+
+<div class="row">
+    <div class="col-4">
+        @Html.ActionLink("Create regular invoice","CreateRegularInvoice","Request",null,new {@class="btn btn-primary"})
+        <p>
+            Create an invoice to receive an immediate payment
+        </p>
+    </div>
+    <div class="col-4">
+        @Html.ActionLink("Create 'payment to date' invoice","CreateRegularInvoice","Request",null,new {@class="btn btn-primary"})
+         <p>
+            Create an invoice to receive a payment on a certain date with your counterparty/client.
+        </p>
+    </div>
+</div>

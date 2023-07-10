@@ -1,0 +1,88 @@
+﻿@model BillProtocol.Models.RequestModel.CreateRegularInvoiceViewModel
+@{
+    ViewData["Title"] = "Create new regular invoice";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>New regular invoice</h2>
+    </div>
+</div>
+
+@if(Model.UserInfo == null)
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger">
+                Update personal/company information to be able to create invoices.
+            </div>
+        </div>
+    </div>
+}
+
+@using(Html.BeginForm())
+{
+    @Html.ValidationSummary(false)
+    <div class="row">
+        <div class="col-3">
+            Invoice number
+        </div>
+        <div class="col-5">
+            <b>@Model.InvoiceNumber</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Client (destination)
+        </div>
+        <div class="col-5">
+            @Html.DropDownListFor(x => x.Form.DestinationId, Model.Destinations, "Select your destination/client",new {@class="form-control"})
+        </div>
+        <div class="col-4">
+            Select the destination for this new invoice.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Wallet
+        </div>
+        <div class="col-5">
+            @Html.DropDownListFor(x => x.Form.WalletId, Model.Wallets, "Select your wallet",new {@class="form-control"})
+        </div>
+        <div class="col-4">
+            Select the wallet where you want to receive the money.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Currency
+        </div>
+        <div class="col-5">
+            @Html.DropDownListFor(x => x.Form.CurrencyId, Model.Currencies, "Select the currency for this invoice",new {@class="form-control"})
+        </div>
+        <div class="col-4">
+            Select the type of currency for this invoice and its transaction.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Payment date
+        </div>
+        <div class="col-5">
+            @Html.TextBoxFor(x => x.Form.PaymentDate, new {@class="form-control", type="date"})
+        </div>
+        <div class="col-4">
+            Enter the date for the payment to be made by the recipient of this invoice.
+        </div>
+    </div>
+    @Html.ValidationSummary(false)
+    <div class="row">
+        <div class="col-6">
+           <br />
+        </div>
+        <div class="col-4">
+            <input type="submit" value="Create invoice" class="btn-primary btn" @(Model.UserInfo == null? "disabled=\"disabled\"" : "") />
+        </div>
+    </div>
+
+}

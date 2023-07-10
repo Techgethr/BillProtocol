@@ -1,4 +1,4 @@
-﻿@model BillProtocol.Models.RequestModel.CreateRegularInvoiceViewModel
+﻿@model BillProtocol.Models.RequestModel.CreateInvoiceViewModel
 @{
     ViewData["Title"] = "Create new regular invoice";
 }
@@ -29,6 +29,17 @@
         </div>
         <div class="col-5">
             <b>@Model.InvoiceNumber</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Invoice type
+        </div>
+        <div class="col-5">
+            @Html.DropDownListFor(x => x.Form.InvoiceTypeId, Model.InvoiceTypes, "Select the type",new {@class="form-control"})
+        </div>
+        <div class="col-4">
+            Select the invoice type.
         </div>
     </div>
     <div class="row">
@@ -75,7 +86,17 @@
             Enter the date for the payment to be made by the recipient of this invoice.
         </div>
     </div>
-    @Html.ValidationSummary(false)
+    <div class="row">
+        <div class="col-3">
+            Memo
+        </div>
+        <div class="col-5">
+            @Html.TextAreaFor(x => x.Form.Memo, new {@class="form-control", type="date"})
+        </div>
+        <div class="col-4">
+            You can enter a memo or information for the recipient of this invoice.
+        </div>
+    </div>
     <div class="row">
         <div class="col-6">
            <br />

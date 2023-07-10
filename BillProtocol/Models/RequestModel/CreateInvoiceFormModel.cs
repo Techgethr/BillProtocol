@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BillProtocol.Models.RequestModel
 {
-    public class CreateRegularInvoiceFormModel
+    public class CreateInvoiceFormModel
     {
         [Required]
         [DisplayName("Destination/client")]
@@ -20,5 +20,18 @@ namespace BillProtocol.Models.RequestModel
         [Required]
         [DisplayName("Currency")]
         public int? CurrencyId { get; set; }
+
+        [Required]
+        [DisplayName("Invoice type")]
+        public int? InvoiceTypeId { get; set; }
+
+        public string? Memo { get;set; }
+
+        public IEnumerable<CreateInvoiceDetailFormModel> Details { get; set; }
+
+        public CreateInvoiceFormModel()
+        {
+            Details = new List<CreateInvoiceDetailFormModel>();
+        }
     }
 }

@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-12">
-        @Html.ActionLink("Create invoice","CreateSelector","Request",null,new {@class="btn btn-info"})
+        @Html.ActionLink("Create invoice","CreateInvoice","Request",null,new {@class="btn btn-info"})
     </div>
 </div>
 
@@ -16,6 +16,7 @@
             <thead>
                 <tr>
                     <th>Creation date</th>
+                    <th>Type</th>
                     <th>Payment date</th>
                     <th>Total amount (currency)</th>
                     <th>Destination</th>
@@ -30,6 +31,7 @@
                     {
                         <tr>
                             <td>@invoice.CreatedAt</td>
+                            <td>@invoice.InvoiceType.Name</td>
                             <td>@invoice.PaymentDate</td>
                             <td>@invoice.TotalAmount (@invoice.Currency.Code)</td>
                             <td>@invoice.Destination.Name</td>
@@ -41,7 +43,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="5">You have no invoices created.</td>
+                        <td colspan="7">You have no invoices created.</td>
                     </tr>
                 }
             </tbody>

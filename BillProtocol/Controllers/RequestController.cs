@@ -28,15 +28,26 @@ namespace BillProtocol.Controllers
             return View();
         }
 
-        public IActionResult CreateRegularInvoice()
+        public IActionResult CreateInvoice()
         {
-            CreateRegularInvoiceViewModel model = new CreateRegularInvoiceViewModel(_db, User.Identity.Name);
+            CreateInvoiceViewModel model = new CreateInvoiceViewModel(_db, User.Identity.Name);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult CreateRegularInvoice(CreateRegularInvoiceFormModel Form)
+        public IActionResult CreateInvoice(CreateInvoiceFormModel Form)
         {
+            if(Form.InvoiceTypeId.HasValue && Form.CurrencyId.HasValue)
+            {
+                if(Form.InvoiceTypeId == Constants.EscrowInvoice && Form.CurrencyId != Constants.XRPCurrency)
+                {
+                    ModelState.AddModelError("Form.CurrencyId", "Escrow only allows XRP as a currency.");
+                }
+            }
+            if(Form.Details.Count() == 0)
+            {
+                ModelState.AddModelError("Form.Details", "You must enter at least one description and its corresponding amount.");
+            }
             if(Form.PaymentDate.HasValue)
             {
                 if(Form.PaymentDate.Value.Date < DateTime.Today)
@@ -46,7 +57,7 @@ namespace BillProtocol.Controllers
             }
             if(!ModelState.IsValid)
             {
-                CreateRegularInvoiceViewModel model = new CreateRegularInvoiceViewModel(_db, User.Identity.Name);
+                CreateInvoiceViewModel model = new CreateInvoiceViewModel(_db, User.Identity.Name);
                 model.Form = Form;
                 return View(model);
             }
@@ -59,21 +70,19 @@ namespace BillProtocol.Controllers
                 UserId = User.Identity.Name,
                 InvoiceNumber = invoiceNumer,
                 InvoiceStatusId = Constants.CreatedInvoiceStatus,
-                InvoiceTypeId = Constants.RegularInvoice,
+                InvoiceTypeId = Form.InvoiceTypeId.Value,
                 DestinationId = Form.DestinationId.Value,
                 WalletId = Form.WalletId.Value,
                 PaymentDate = Form.PaymentDate.Value,
                 CurrencyId = Form.CurrencyId.Value,
-                TotalAmount = 0
+                TotalAmount = 0, Memo = Form.Memo
             }; 
+            
             _db.Invoices.Add(invoice);
             _db.SaveChanges();
             return RedirectToAction("Detail", new { id = invoice.Id });
         }
 
-        public IActionResult CreatePaymentDateInvoice()
-        {
-            return View();
-        }
+
     }
 }

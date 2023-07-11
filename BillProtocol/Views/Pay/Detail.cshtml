@@ -1,0 +1,152 @@
+﻿@model BillProtocol.Models.PayModel.DetailsPayViewModel
+@{
+    ViewData["Title"] = "Invoice details";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Invoice details</h2>
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-3">
+            Invoice number
+        </div>
+        <div class="col-5">
+            <b>@Model.Invoice.InvoiceNumber</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Invoice type
+        </div>
+        <div class="col-5">
+            @Model.Invoice.InvoiceType.Name
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Wallet to pay
+        </div>
+        <div class="col-5">
+            @Model.Invoice.Wallet.Address
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Currency
+        </div>
+        <div class="col-5">
+            @Model.Invoice.Currency.Name (@Model.Invoice.Currency.Code)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Payment date
+        </div>
+        <div class="col-5">
+            @Model.Invoice.PaymentDate.ToShortDateString()
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h4>Items</h4>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Discount</th>
+                        <th>Tax</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.Description</td>
+                            <td>@item.Quantity</td>
+                            <td>@Model.Invoice.Currency.Code @(item.UnitPrice.GetValueOrDefault().ToString("N0"))</td>
+                            <td>@(item.Discount.HasValue? Model.Invoice.Currency.Code+" "+ item.Discount.Value.ToString("N0"): "-") </td>
+                            <td>@(item.Tax.HasValue? item.Tax.Value.ToString()+"%": "-")</td>
+                            <td>@Model.Invoice.Currency.Code @item.TotalAmount.GetValueOrDefault().ToString("N0")</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="5">Total</td>
+                        <td>@Model.Invoice.Currency.Code @Model.Invoice.TotalAmount.GetValueOrDefault().ToString("N0")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            Memo
+        </div>
+        <div class="col-5">
+            @Model.Invoice.Memo
+        </div>
+    </div>
+
+
+    @if(Model.Invoice.InvoiceStatusId == Constants.CreatedInvoiceStatus && Model.Invoice.InvoiceTypeId == Constants.RegularInvoice)
+    {
+        @using(Html.BeginForm("ApproveReject","Pay"))
+        {
+            <div class="row">
+                    
+                <div class="col-6">
+                    <input type="hidden" value="@Model.Invoice.Id" name="idInvoice" />
+                    Comments: <br />
+                    <input type="text" name="comments" class="form-control" />
+                </div>
+                <div class="col-6">
+                    <input type="submit" value="Approve" name="approveButton" class="btn btn-success" /> <br />
+                    <input type="submit" value="Reject" name="rejectButton" class="btn btn-danger" /> 
+                </div>
+            </div>
+        } 
+    }
+
+    @if(Model.Invoice.InvoiceStatusId == Constants.ApprovedInvoiceStatus && Model.Invoice.InvoiceTypeId == Constants.RegularInvoice)
+    {
+        @using(Html.BeginForm("PayInvoice","Pay"))
+        {
+            <div class="row">
+                    
+                <div class="col-6">
+                    <input type="hidden" name="successfulPayment" id="successfulPayment"/>
+                    @*<input type="hidden" name="txId" />*@
+                    <input type="hidden" value="@Model.Invoice.Id" name="idInvoice" id="idInvoice" />
+                    Seed code: <input type="password" name="seedCode" id="seedCode" class="form-control" />
+                </div>
+                <div class="col-6">
+                    <input type="button" value="Pay" id="payInvoiceXRPL" class="btn btn-success" /> <br />
+                </div>
+            </div>
+        } 
+    }
+    
+
+
+@section Scripts
+{
+    <script src="https://unpkg.com/xrpl@2.0.0/build/xrpl-latest-min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#payInvoiceXRPL').click(async function () {
+                var seedCode = $('#seedCode').val();
+                await sendXRPLPayment(seedCode,'@Model.Invoice.Currency.Code',@(Model.Invoice.TotalAmount.Value.ToString("N2").Replace(",",".")),'@Model.Invoice.Wallet.Address')
+                
+            });
+        });
+    </script>
+    
+}

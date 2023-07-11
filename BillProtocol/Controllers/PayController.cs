@@ -21,30 +21,29 @@ namespace BillProtocol.Controllers
             return View(model);
         }
 
-        public IActionResult Details(Guid id)
+        public IActionResult Detail(Guid id)
         {
             DetailsPayViewModel model = new DetailsPayViewModel(_db, id);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Approve(Guid id)
+        public IActionResult ApproveReject(Guid idInvoice, string approveButton, string rejectButton, string comments)
         {
-            Invoice invoice = _db.Invoices.SingleOrDefault(x => x.Id == id);
-            invoice.InvoiceStatusId = Constants.ApprovedInvoiceStatus;
-            _db.SaveChanges();
-            return RedirectToAction("Details", new { id = id });
-        }
-
-        [HttpPost]
-        public IActionResult Reject(Guid id, string comments)
-        {
-            Invoice invoice = _db.Invoices.SingleOrDefault(x => x.Id == id);
-            invoice.InvoiceStatusId = Constants.RejectedInvoiceStatus;
+            Invoice invoice = _db.Invoices.SingleOrDefault(x => x.Id == idInvoice);
+            if(approveButton == "Approve")
+            {
+                invoice.InvoiceStatusId = Constants.ApprovedInvoiceStatus;
+            }
+            if (rejectButton == "Reject")
+            {
+                invoice.InvoiceStatusId = Constants.RejectedInvoiceStatus;
+            }
             invoice.InvoiceStatusComments = comments;
             _db.SaveChanges();
-            return RedirectToAction("Details", new { id = id });
+            return RedirectToAction("Detail", new { id = idInvoice });
         }
+
 
         [HttpPost]
         public IActionResult Payed(Guid id)

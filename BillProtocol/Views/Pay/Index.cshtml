@@ -1,14 +1,8 @@
-﻿@model BillProtocol.Models.RequestModel.IndexRequestViewModel
+﻿@model BillProtocol.Models.PayModel.IndexPayViewModel
 @{
-    ViewData["Title"] = "My Requests";
+    ViewData["Title"] = "Received invoices";
 }
 
-
-<div class="row">
-    <div class="col-12">
-        @Html.ActionLink("Create invoice","CreateInvoice","Request",null,new {@class="btn btn-info"})
-    </div>
-</div>
 
 <div class="row">
     <div class="col-12">
@@ -19,8 +13,7 @@
                     <th>Type</th>
                     <th>Payment date</th>
                     <th>Total amount (currency)</th>
-                    <th>Destination</th>
-                    <th>Wallet</th>
+                    <th>Wallet to pay</th>
                     <th>Status</th>
                     <th></th>
                 </tr>
@@ -35,10 +28,9 @@
                             <td>@invoice.InvoiceType.Name</td>
                             <td>@invoice.PaymentDate.ToShortDateString()</td>
                             <td>@invoice.TotalAmount (@invoice.Currency.Code)</td>
-                            <td>@invoice.Destination.Name</td>
-                            <td>@invoice.Wallet.Name</td>
+                            <td>@invoice.Wallet.Address</td>
                             <td>@invoice.InvoiceStatus.Name</td>
-                            <td>@Html.ActionLink("View", "Detail","Request",new {id = invoice.Id}, new {@class="btn btn-secondary"})</td>
+                            <td>@Html.ActionLink("View", "Detail","Pay",new {id = invoice.Id}, new {@class="btn btn-secondary"})</td>
                         </tr>
                     }
                 }

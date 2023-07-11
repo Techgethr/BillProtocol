@@ -4,13 +4,13 @@ namespace BillProtocol.Models.RequestModel
 {
     public class CreateInvoiceDetailFormModel
     {
-        [Required]
+        //[Required]
         public string? Description { get; set; }
 
-        [Required]
-        public int Quantity { get; set; }
+       // [Required]
+        public int? Quantity { get; set; }
 
-        [Required]
+        //[Required]
         public decimal? UnitPrice { get; set; }
 
         public decimal? Discount { get; set; }

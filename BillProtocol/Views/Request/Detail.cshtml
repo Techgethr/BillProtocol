@@ -1,0 +1,97 @@
+﻿@model BillProtocol.Models.RequestModel.DetailInvoiceViewModel
+@{
+    ViewData["Title"] = "Invoice Detail";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <h2>Invoice details</h2>
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-3">
+            Invoice number
+        </div>
+        <div class="col-5">
+            <b>@Model.Invoice.InvoiceNumber</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Invoice type
+        </div>
+        <div class="col-5">
+            @Model.Invoice.InvoiceType.Name
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Wallet to pay
+        </div>
+        <div class="col-5">
+            @Model.Invoice.Wallet.Address
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Currency
+        </div>
+        <div class="col-5">
+            @Model.Invoice.Currency.Name (@Model.Invoice.Currency.Code)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Payment date
+        </div>
+        <div class="col-5">
+            @Model.Invoice.PaymentDate.ToShortDateString()
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h4>Items</h4>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Discount</th>
+                        <th>Tax</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.Description</td>
+                            <td>@item.Quantity</td>
+                            <td>@Model.Invoice.Currency.Code @(item.UnitPrice.GetValueOrDefault().ToString("N0"))</td>
+                            <td>@(item.Discount.HasValue? Model.Invoice.Currency.Code+" "+ item.Discount.Value.ToString("N0"): "-") </td>
+                            <td>@(item.Tax.HasValue? item.Tax.Value.ToString()+"%": "-")</td>
+                            <td>@Model.Invoice.Currency.Code @item.TotalAmount.GetValueOrDefault().ToString("N0")</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="5">Total</td>
+                        <td>@Model.Invoice.Currency.Code @Model.Invoice.TotalAmount.GetValueOrDefault().ToString("N0")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            Memo
+        </div>
+        <div class="col-5">
+            @Model.Invoice.Memo
+        </div>
+    </div>

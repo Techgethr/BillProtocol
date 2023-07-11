@@ -9,7 +9,7 @@ namespace BillProtocol.Models.RequestModel
 
         public IndexRequestViewModel(ApplicationDbContext db, string? userName)
         {
-            Invoices = db.Invoices.Include(x => x.Wallet).Include(x => x.Destination)
+            Invoices = db.Invoices.Include(x => x.Wallet).Include(x => x.Destination).Include(x => x.Currency)
                 .Include(x => x.InvoiceStatus).Include(x => x.InvoiceType).Where(x => x.UserId == userName).OrderByDescending(x => x.CreatedAt);
         }
     }

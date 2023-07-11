@@ -36,7 +36,8 @@
             Invoice type
         </div>
         <div class="col-5">
-            @Html.DropDownListFor(x => x.Form.InvoiceTypeId, Model.InvoiceTypes, "Select the type",new {@class="form-control"})
+            @Html.DropDownListFor(x => x.Form.InvoiceTypeId, Model.InvoiceTypes, "Select the type",new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.InvoiceTypeId)
         </div>
         <div class="col-4">
             Select the invoice type.
@@ -47,7 +48,8 @@
             Client (destination)
         </div>
         <div class="col-5">
-            @Html.DropDownListFor(x => x.Form.DestinationId, Model.Destinations, "Select your destination/client",new {@class="form-control"})
+            @Html.DropDownListFor(x => x.Form.DestinationId, Model.Destinations, "Select your destination/client",new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.DestinationId)
         </div>
         <div class="col-4">
             Select the destination for this new invoice.
@@ -58,7 +60,8 @@
             Wallet
         </div>
         <div class="col-5">
-            @Html.DropDownListFor(x => x.Form.WalletId, Model.Wallets, "Select your wallet",new {@class="form-control"})
+            @Html.DropDownListFor(x => x.Form.WalletId, Model.Wallets, "Select your wallet",new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.WalletId)
         </div>
         <div class="col-4">
             Select the wallet where you want to receive the money.
@@ -69,7 +72,8 @@
             Currency
         </div>
         <div class="col-5">
-            @Html.DropDownListFor(x => x.Form.CurrencyId, Model.Currencies, "Select the currency for this invoice",new {@class="form-control"})
+            @Html.DropDownListFor(x => x.Form.CurrencyId, Model.Currencies, "Select the currency for this invoice",new {@class="form-control"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.CurrencyId)
         </div>
         <div class="col-4">
             Select the type of currency for this invoice and its transaction.
@@ -80,18 +84,58 @@
             Payment date
         </div>
         <div class="col-5">
-            @Html.TextBoxFor(x => x.Form.PaymentDate, new {@class="form-control", type="date"})
+            @Html.TextBoxFor(x => x.Form.PaymentDate, new {@class="form-control", type="date"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.CurrencyId)
         </div>
         <div class="col-4">
             Enter the date for the payment to be made by the recipient of this invoice.
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h4>Items</h4>
+            @Html.ValidationMessageFor(x => x.Form.Details) <br />
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Discount</th>
+                        <th>Tax</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(int i = 0; i < 10; i++)
+                    {
+                        <tr>
+                            <td><input type="text" class="form-control" name="Form.Details[@i].Description" /></td>
+                            <td><input type="number" class="form-control" name="Form.Details[@i].Quantity" /></td>
+                            <td><input type="number" class="form-control" name="Form.Details[@i].UnitPrice" /></td>
+                            <td><input type="number" class="form-control" name="Form.Details[@i].Discount" /></td>
+                            <td><input type="number" class="form-control" name="Form.Details[@i].Tax" /></td>
+                            <td></td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="5"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-3">
             Memo
         </div>
         <div class="col-5">
-            @Html.TextAreaFor(x => x.Form.Memo, new {@class="form-control", type="date"})
+            @Html.TextAreaFor(x => x.Form.Memo, new {@class="form-control", type="date"}) <br />
+            @Html.ValidationMessageFor(x => x.Form.Memo)
         </div>
         <div class="col-4">
             You can enter a memo or information for the recipient of this invoice.

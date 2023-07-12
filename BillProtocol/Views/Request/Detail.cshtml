@@ -3,6 +3,15 @@
     ViewData["Title"] = "Invoice Detail";
 }
 
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">@ViewData["Title"]</span>
+    </div> 
+    
+}
+
+<br /><br />
 
 @if(Model.Invoice.InvoiceStatusId == Constants.RejectedInvoiceStatus)
     {
@@ -35,7 +44,7 @@
 
     <div class="row">
         <div class="col-3">
-            Invoice number
+            <h5>Invoice number</h5>
         </div>
         <div class="col-5">
             <b>@Model.Invoice.InvoiceNumber</b>
@@ -43,7 +52,7 @@
     </div>
     <div class="row">
         <div class="col-3">
-            Invoice type
+            <h5>Invoice type</h5>
         </div>
         <div class="col-5">
             @Model.Invoice.InvoiceType.Name
@@ -51,7 +60,7 @@
     </div>
     <div class="row">
         <div class="col-3">
-            Wallet to pay
+            <h5>Wallet to pay</h5>
         </div>
         <div class="col-5">
             @Model.Invoice.Wallet.Address
@@ -59,7 +68,7 @@
     </div>
     <div class="row">
         <div class="col-3">
-            Currency
+            <h5>Currency</h5>
         </div>
         <div class="col-5">
             @Model.Invoice.Currency.Name (@Model.Invoice.Currency.Code)
@@ -67,13 +76,13 @@
     </div>
     <div class="row">
         <div class="col-3">
-            Payment date
+            <h5>Payment date</h5>
         </div>
         <div class="col-5">
             @Model.Invoice.PaymentDate.ToShortDateString()
         </div>
     </div>
-
+    <br /><br /><br />
     <div class="row">
         <div class="col-12">
             <h4>Items</h4>
@@ -95,15 +104,15 @@
                         <tr>
                             <td>@item.Description</td>
                             <td>@item.Quantity</td>
-                            <td>@Model.Invoice.Currency.Code @(item.UnitPrice.GetValueOrDefault().ToString())</td>
-                            <td>@(item.Discount.HasValue? Model.Invoice.Currency.Code+" "+ item.Discount.Value.ToString(): "-") </td>
+                            <td>@(item.UnitPrice.GetValueOrDefault().ToString()) @Model.Invoice.Currency.Code</td>
+                            <td>@(item.Discount.HasValue? item.Discount.Value.ToString()+" "+Model.Invoice.Currency.Code: "-") </td>
                             <td>@(item.Tax.HasValue? item.Tax.Value.ToString()+"%": "-")</td>
-                            <td>@Model.Invoice.Currency.Code @item.TotalAmount.GetValueOrDefault().ToString()</td>
+                            <td>@item.TotalAmount.GetValueOrDefault().ToString() @Model.Invoice.Currency.Code</td>
                         </tr>
                     }
                     <tr>
-                        <td colspan="5">Total</td>
-                        <td>@Model.Invoice.Currency.Code @Model.Invoice.TotalAmount.GetValueOrDefault().ToString()</td>
+                        <th colspan="5">Total</th>
+                        <th>@Model.Invoice.TotalAmount.GetValueOrDefault().ToString() @Model.Invoice.Currency.Code</th>
                     </tr>
                 </tbody>
             </table>
@@ -112,13 +121,13 @@
 
     <div class="row">
         <div class="col-3">
-            Memo
+            <span class="h4">Memo</span>
         </div>
         <div class="col-5">
-            @Model.Invoice.Memo
+            <b>@Model.Invoice.Memo</b>
         </div>
     </div>
-
+    <br /><br />
 
 
     @if(Model.Invoice.InvoiceStatusId == Constants.ApprovedInvoiceStatus && Model.Invoice.PaymentDate.Date <= DateTime.Today.Date && Model.Invoice.InvoiceTypeId == Constants.PaymentToDateInvoice && Model.Invoice.UserId == User.Identity.Name)
@@ -195,7 +204,7 @@
         }
         
     }
-
+    <br /><br /><br />
 
 @section Scripts
 {

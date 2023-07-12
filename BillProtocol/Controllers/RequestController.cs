@@ -45,9 +45,16 @@ namespace BillProtocol.Controllers
                 }
             }
             //TODO: Mejor validación
-            if(Form.Details != null && Form.Details.Count() == 0)
+            if(Form.Details != null)
             {
-                ModelState.AddModelError("Form.Details", "You must enter at least one description and its corresponding amount.");
+                if(!Form.Details.Any(x => x.Description != null))
+                {
+                    ModelState.AddModelError("Form.Details", "You must enter at least 1 item.");
+                }
+                if (Form.Details.Any(x => x.UnitPrice != null && x.Description == null))
+                {
+                    ModelState.AddModelError("Form.Details", "You must enter at least 1 item.");
+                }
             }
             if(Form.PaymentDate.HasValue)
             {

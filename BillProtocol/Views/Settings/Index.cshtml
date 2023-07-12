@@ -3,19 +3,22 @@
     ViewData["Title"] = "Manage your account";
 }
 
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">@ViewData["Title"]</span>
+    </div> 
+    
+}
 
+<br /><br />
 
-<div class="row">
-    <div class="col-12">
-        <h2>@ViewData["Title"]</h2>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-4">
             @if(Model.UserInfo != null)
             {
-                <h3>Personal/Company Information</h3>
+                <h3>Personal/Company Info</h3>
                 <p class="alert alert-info">
                     @(Model.UserInfo.FirstName+" "+Model.UserInfo.LastName) <br />
                     @Model.UserInfo.TaxId <br />
@@ -48,3 +51,4 @@
                 @Html.ActionLink("Manage destinations","MyDestinations","Settings",null, new {@class="btn btn-success"})
     </div>
 </div>
+<br /><br /><br />

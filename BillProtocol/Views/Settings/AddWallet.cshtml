@@ -3,11 +3,16 @@
     ViewData["Title"] = "Add a new wallet";
 }
 
-<div class="row">
-    <div class="col-12">
-        <h2>@ViewData["Title"]</h2>
-    </div>
-</div>
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">@ViewData["Title"]</span>
+    </div> 
+    
+}
+
+<br /><br />
+
 
 <div class="row">
     <div class="col-12">
@@ -49,3 +54,5 @@
         </div>
     </div>
 }
+
+<br /><br />

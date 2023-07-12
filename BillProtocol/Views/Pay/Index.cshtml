@@ -3,6 +3,16 @@
     ViewData["Title"] = "Received invoices";
 }
 
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">@ViewData["Title"]</span>
+    </div> 
+    
+}
+
+<br />
+
 
 <div class="row">
     <div class="col-12">
@@ -29,7 +39,10 @@
                             <td>@invoice.PaymentDate.ToShortDateString()</td>
                             <td>@invoice.TotalAmount (@invoice.Currency.Code)</td>
                             <td>@invoice.Wallet.Address</td>
-                            <td>@invoice.InvoiceStatus.Name</td>
+                            @{
+                                var badgeClass = invoice.InvoiceStatus.Id == Constants.PayedInvoiceStatus ? "badge-success" : (invoice.InvoiceStatus.Id == Constants.RejectedInvoiceStatus? "badge-danger":"badge-primary"); 
+                            }
+                            <td><span class="badge @badgeClass">@invoice.InvoiceStatus.Name</span></td>
                             <td>@Html.ActionLink("View", "Detail","Pay",new {id = invoice.Id}, new {@class="btn btn-secondary"})</td>
                         </tr>
                     }
@@ -37,7 +50,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="8">You have no invoices created.</td>
+                        <td colspan="8">You have no received invoices.</td>
                     </tr>
                 }
             </tbody>

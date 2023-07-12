@@ -1,14 +1,25 @@
 ﻿@model BillProtocol.Models.RequestModel.IndexRequestViewModel
 @{
-    ViewData["Title"] = "My Requests";
+    ViewData["Title"] = "My Invoices";
 }
 
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">@ViewData["Title"]</span>
+    </div> 
+    
+}
+
+<br />
 
 <div class="row">
     <div class="col-12">
         @Html.ActionLink("Create invoice","CreateInvoice","Request",null,new {@class="btn btn-info"})
     </div>
 </div>
+
+<br />
 
 <div class="row">
     <div class="col-12">
@@ -37,7 +48,10 @@
                             <td>@invoice.TotalAmount (@invoice.Currency.Code)</td>
                             <td>@invoice.Destination.Name</td>
                             <td>@invoice.Wallet.Name</td>
-                            <td>@invoice.InvoiceStatus.Name</td>
+                            @{
+                                var badgeClass = invoice.InvoiceStatus.Id == Constants.PayedInvoiceStatus ? "badge-success" : (invoice.InvoiceStatus.Id == Constants.RejectedInvoiceStatus? "badge-danger":"badge-primary"); 
+                            }
+                            <td><span class="badge @badgeClass">@invoice.InvoiceStatus.Name</span></td>
                             <td>@Html.ActionLink("View", "Detail","Request",new {id = invoice.Id}, new {@class="btn btn-secondary"})</td>
                         </tr>
                     }

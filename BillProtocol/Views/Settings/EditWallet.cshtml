@@ -3,16 +3,28 @@
     ViewData["Title"] = "Update wallet";
 }
 
-<div class="row">
-    <div class="col-12">
-        <h2>@ViewData["Title"]</h2>
-    </div>
-</div>
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">@ViewData["Title"]</span>
+    </div> 
+    
+}
+
+<br /><br />
+
 
 <div class="row">
     <div class="col-12">
         <div class="alert alert-info">
             Update the data of the wallet if not corresponding.
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-danger">
+            Changing the address of a wallet may imply the impossibility of collecting pending invoices through checks and escrows.
         </div>
     </div>
 </div>
@@ -50,3 +62,4 @@
         </div>
     </div>
 }
+<br /><br />

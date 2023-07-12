@@ -361,7 +361,7 @@ async function cashMoneyFromEscrow(originAddress, seed, ownerEscrow, offerSequen
                 $('.successPayment').css('display', 'block');
                 $('.waitingPayment').css('display', 'none');
                 //$('.btnRedeem').prop("disabled", false);
-                //$('#cashPaymentForm').submit();
+                $('#cashPaymentForm').submit();
             }
             else {
                 $('#successfulPayment').val(false);
@@ -384,4 +384,16 @@ async function cashMoneyFromEscrow(originAddress, seed, ownerEscrow, offerSequen
         $('.btnRedeem').prop("disabled", false);
         console.error(err);
     }
+}
+
+function updateTotal(index) {
+    var quantity = $('#Quantity_'+index).val();
+    var unitPrice = $('#UnitPrice_' + index).val();
+    var discount = $('#Discount_' + index).val();
+    var tax = $('#Tax_'+index).val();
+
+    var totalAmountWithoutTax = ((quantity * unitPrice) - discount);
+    var totalAmountWithTax = totalAmountWithoutTax + (tax != null ? (totalAmountWithoutTax * tax / 100) : 0);
+
+    $('.total_' + index).text(totalAmountWithTax);
 }

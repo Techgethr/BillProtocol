@@ -1,13 +1,18 @@
 ﻿@model BillProtocol.Models.RequestModel.CreateInvoiceViewModel
 @{
-    ViewData["Title"] = "Create new regular invoice";
+    ViewData["Title"] = "Create new invoice";
 }
 
-<div class="row">
-    <div class="col-12">
-        <h2>New regular invoice</h2>
-    </div>
-</div>
+
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">@ViewData["Title"]</span>
+    </div> 
+    
+}
+
+<br /><br />
 
 @if(Model.UserInfo == null)
 {
@@ -22,7 +27,6 @@
 
 @using(Html.BeginForm())
 {
-    @Html.ValidationSummary(false)
     <div class="row">
         <div class="col-3">
             Invoice number
@@ -31,6 +35,7 @@
             <b>@Model.InvoiceNumber</b>
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-3">
             Invoice type
@@ -40,9 +45,16 @@
             @Html.ValidationMessageFor(x => x.Form.InvoiceTypeId)
         </div>
         <div class="col-4">
-            Select the invoice type.
+            <div class="alert alert-success" role="alert">
+                Select the invoice type: <br />
+                - Regular invoice: A normal invoice that the recipient can pay at any time. <br />
+                - Payment To Date: The receiver generates a check associated with his/her account and that you can redeem when the payment date is executed (to cash from his/her account).<br />
+                - Escrow: The receiver deposits the money in an escrow and you can redeem it when the payment date arrives.
+            </div>
+            
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-3">
             Client (destination)
@@ -52,9 +64,13 @@
             @Html.ValidationMessageFor(x => x.Form.DestinationId)
         </div>
         <div class="col-4">
-            Select the destination for this new invoice.
+            <div class="alert alert-success" role="alert">
+                Select the destination for this new invoice.
+            </div>
+            
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-3">
             Wallet
@@ -64,9 +80,13 @@
             @Html.ValidationMessageFor(x => x.Form.WalletId)
         </div>
         <div class="col-4">
-            Select the wallet where you want to receive the money.
+            <div class="alert alert-success" role="alert">
+                Select the wallet where you want to receive the money.
+            </div>
+            
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-3">
             Currency
@@ -76,9 +96,13 @@
             @Html.ValidationMessageFor(x => x.Form.CurrencyId)
         </div>
         <div class="col-4">
-            Select the type of currency for this invoice and its transaction.
+            <div class="alert alert-success" role="alert">
+                Select the type of currency for this invoice and its transaction.
+            </div>
+            
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-3">
             Payment date
@@ -88,10 +112,13 @@
             @Html.ValidationMessageFor(x => x.Form.CurrencyId)
         </div>
         <div class="col-4">
-            Enter the date for the payment to be made by the recipient of this invoice.
+             <div class="alert alert-success" role="alert">
+                Enter the date for the payment to be made by the recipient of this invoice.
+            </div>
+            
         </div>
     </div>
-
+    <br />
     <div class="row">
         <div class="col-12">
             <h4>Items</h4>
@@ -104,7 +131,7 @@
                         <th>Quantity</th>
                         <th>Unit Price</th>
                         <th>Discount</th>
-                        <th>Tax</th>
+                        <th>Tax (%)</th>
                         <th>Total</th>
                     </tr>
                 </thead>
@@ -113,22 +140,22 @@
                     {
                         <tr>
                             <td><input type="text" class="form-control" name="Form.Details[@i].Description" /></td>
-                            <td><input type="number" class="form-control" name="Form.Details[@i].Quantity" /></td>
-                            <td><input type="number" class="form-control" name="Form.Details[@i].UnitPrice" /></td>
-                            <td><input type="number" class="form-control" name="Form.Details[@i].Discount" /></td>
-                            <td><input type="number" class="form-control" name="Form.Details[@i].Tax" /></td>
-                            <td></td>
+                            <td><input type="number" class="form-control" name="Form.Details[@i].Quantity" id="Quantity_@i" onchange="updateTotal(@i);" /></td>
+                            <td><input type="number" class="form-control" name="Form.Details[@i].UnitPrice" id="UnitPrice_@i" onchange="updateTotal(@i);" /></td>
+                            <td><input type="number" class="form-control" name="Form.Details[@i].Discount" id="Discount_@i" onchange="updateTotal(@i);" /></td>
+                            <td><input type="number" class="form-control" name="Form.Details[@i].Tax" id="Tax_@i" onchange="updateTotal(@i);" /></td>
+                            <th><span class="totalToSum total_@i"></span></th>
                         </tr>
                     }
                     <tr>
                         <td colspan="5"></td>
-                        <td></td>
+                        <td><span class="totalinvoice"></span></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
+    <br />
     <div class="row">
         <div class="col-3">
             Memo
@@ -138,9 +165,13 @@
             @Html.ValidationMessageFor(x => x.Form.Memo)
         </div>
         <div class="col-4">
-            You can enter a memo or information for the recipient of this invoice.
+            <div class="alert alert-success" role="alert">
+                You can enter a memo or information for the recipient of this invoice.
+            </div>
+            
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-6">
            <br />
@@ -149,5 +180,6 @@
             <input type="submit" value="Create invoice" class="btn-primary btn" @(Model.UserInfo == null? "disabled=\"disabled\"" : "") />
         </div>
     </div>
+    <br /><br /><br />
 
 }

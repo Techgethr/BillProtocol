@@ -3,53 +3,69 @@
     ViewData["Title"] = "Invoice details";
 }
 
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">@ViewData["Title"]</span>
+    </div> 
+    
+}
+
+<br /><br />
+
 <div class="row">
     <div class="col-12">
         <h2>Invoice details</h2>
     </div>
 </div>
 
+<br />
+
     <div class="row">
         <div class="col-3">
-            Invoice number
+            <h5>Invoice number</h5>
         </div>
         <div class="col-5">
             <b>@Model.Invoice.InvoiceNumber</b>
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-3">
-            Invoice type
+            <h5>Invoice type</h5>
         </div>
         <div class="col-5">
             @Model.Invoice.InvoiceType.Name
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-3">
-            Wallet to pay
+            <h5>Wallet to pay</h5>
         </div>
         <div class="col-5">
             @Model.Invoice.Wallet.Address
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-3">
-            Currency
+            <h5>Currency</h5>
         </div>
         <div class="col-5">
             @Model.Invoice.Currency.Name (@Model.Invoice.Currency.Code)
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-3">
-            Payment date
+            <h5>Payment date</h5>
         </div>
         <div class="col-5">
             @Model.Invoice.PaymentDate.ToShortDateString()
         </div>
     </div>
-
+    <br />
     <div class="row">
         <div class="col-12">
             <h4>Items</h4>
@@ -71,72 +87,73 @@
                         <tr>
                             <td>@item.Description</td>
                             <td>@item.Quantity</td>
-                            <td>@Model.Invoice.Currency.Code @(item.UnitPrice.GetValueOrDefault().ToString())</td>
-                            <td>@(item.Discount.HasValue? Model.Invoice.Currency.Code+" "+ item.Discount.Value.ToString(): "-") </td>
+                            <td> @(item.UnitPrice.GetValueOrDefault().ToString()) @Model.Invoice.Currency.Code</td>
+                            <td>@(item.Discount.HasValue? item.Discount.Value.ToString()+" "+Model.Invoice.Currency.Code: "-") </td>
                             <td>@(item.Tax.HasValue? item.Tax.Value.ToString()+"%": "-")</td>
-                            <td>@Model.Invoice.Currency.Code @item.TotalAmount.GetValueOrDefault().ToString()</td>
+                            <td> @item.TotalAmount.GetValueOrDefault().ToString() @Model.Invoice.Currency.Code</td>
                         </tr>
                     }
                     <tr>
-                        <td colspan="5">Total</td>
-                        <td>@Model.Invoice.Currency.Code @Model.Invoice.TotalAmount.GetValueOrDefault().ToString()</td>
+                        <th colspan="5">Total</th>
+                        <th> @Model.Invoice.TotalAmount.GetValueOrDefault().ToString() @Model.Invoice.Currency.Code</th>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
+    <br />
     <div class="row">
         <div class="col-3">
-            Memo
+            <span class="h4">Memo</span>
         </div>
         <div class="col-5">
             @Model.Invoice.Memo
         </div>
     </div>
-
+    <br />
 
     @if(Model.Invoice.InvoiceStatusId == Constants.CreatedInvoiceStatus && Model.Invoice.InvoiceTypeId == Constants.RegularInvoice)
     {
         @using(Html.BeginForm("ApproveReject","Pay"))
         {
+            <h4>Approve the payment</h4>
             <div class="row">
                     
-                <div class="col-6">
+                <div class="col-5">
+                    
                     <input type="hidden" value="@Model.Invoice.Id" name="idInvoice" />
                     Comments: <br />
                     <input type="text" name="comments" class="form-control" />
                 </div>
                 <div class="col-6">
-                    <input type="submit" value="Approve" name="approveButton" class="btn btn-success" /> <br />
+                    <input type="submit" value="Approve" name="approveButton" class="btn btn-success" />  <br /> <br />
                     <input type="submit" value="Reject" name="rejectButton" class="btn btn-danger" /> 
                 </div>
             </div>
         } 
     }
-
+   
     @if(Model.Invoice.InvoiceStatusId == Constants.CreatedInvoiceStatus && Model.Invoice.InvoiceTypeId == Constants.EscrowInvoice)
     {
         @using(Html.BeginForm("ApproveRejectPaymentInvoice","Pay", FormMethod.Post, new { id="deferredPaymentForm" }))
         {
+            <h4>Approve the payment</h4>
             <div class="row">
-                 <div class="col-6">
+                
+                 <div class="col-5">
+                     
                     <input type="hidden" name="successfulPayment" id="successfulPayment"/>
                     <input type="hidden" name="checkId" id="checkId" />
                     <input type="hidden" name="ledgerSequence" id="ledgerSequence" />
                     <input type="hidden" value="@Model.Invoice.Id" name="idInvoice" id="idInvoice" />
                     Seed code (XRPL wallet): <input type="password" name="seedCode" id="seedCode" class="form-control" />
                 </div>
-            </div>
-            <br />
-            <div class="row">
-                    
-                <div class="col-6">
+                <div class="col-4">
                     Comments: <br />
                     <input type="text" name="comments" class="form-control" />
                 </div>
-                <div class="col-6">
-                    <input type="submit" value="Approve" name="approveButton" class="btn btn-success approveEscrowBtn" /> <br />
+                <div class="col-2">
+                    <input type="submit" value="Approve" name="approveButton" class="btn btn-success approveEscrowBtn" />  <br /> <br />
                     <input type="submit" value="Reject" name="rejectButton" class="btn btn-danger rejectEscrowBtn" /> 
                 </div>
             </div>
@@ -162,23 +179,21 @@
     {
         @using(Html.BeginForm("ApproveRejectPaymentInvoice","Pay", FormMethod.Post, new { id="deferredPaymentForm" }))
         {
+            <h4>Approve the payment</h4>
             <div class="row">
-                 <div class="col-6">
+                 <div class="col-5">
+                     
                     <input type="hidden" name="successfulPayment" id="successfulPayment"/>
                     <input type="hidden" name="checkId" id="checkId" />
                     <input type="hidden" value="@Model.Invoice.Id" name="idInvoice" id="idInvoice" />
                     Seed code (XRPL wallet): <input type="password" name="seedCode" id="seedCode" class="form-control" />
                 </div>
-            </div>
-            <br />
-            <div class="row">
-                    
-                <div class="col-6">
+                <div class="col-4">
                     Comments: <br />
                     <input type="text" name="comments" class="form-control" />
                 </div>
-                <div class="col-6">
-                    <input type="submit" value="Approve" name="approveButton" class="btn btn-success approveCheckBtn" /> <br />
+                <div class="col-2">
+                    <input type="submit" value="Approve" name="approveButton" class="btn btn-success approveCheckBtn" /> <br /> <br />
                     <input type="submit" value="Reject" name="rejectButton" class="btn btn-danger rejectCheckBtn" /> 
                 </div>
             </div>
@@ -199,14 +214,16 @@
             </div>
         } 
     }
-
+     <br />
     @if(Model.Invoice.InvoiceStatusId == Constants.ApprovedInvoiceStatus && Model.Invoice.InvoiceTypeId == Constants.RegularInvoice)
     {
         @using(Html.BeginForm("PayRegularInvoice","Pay",FormMethod.Post,new {id="regularInvoiceForm"}))
         {
+            <h4>Make the payment</h4>
             <div class="row">
+                  
+                <div class="col-5">
                     
-                <div class="col-6">
                     <input type="hidden" name="successfulPayment" id="successfulPayment"/>
                     @*<input type="hidden" name="txId" id="txId" />*@
                     <input type="hidden" value="@Model.Invoice.Id" name="idInvoice" id="idInvoice" />
@@ -233,7 +250,7 @@
             </div>
         } 
     }
-
+     <br />
     @if(Model.Invoice.InvoiceStatusId == Constants.RejectedInvoiceStatus)
     {
         <div class="row">
@@ -278,7 +295,7 @@
         </div>
     }
 
-
+     <br />
 
 @section Scripts
 {

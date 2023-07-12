@@ -44,14 +44,46 @@ namespace BillProtocol.Controllers
             return RedirectToAction("Detail", new { id = idInvoice });
         }
 
+        [HttpPost]
+        public IActionResult ApproveRejectPaymentInvoice(Guid idInvoice, string approveButton, string rejectButton, string comments, string checkId, long? ledgerSequence)
+        {
+            if(checkId == null && approveButton == "Approve")
+            {
+                return RedirectToAction("Detail", new { id = idInvoice });
+            }
+            Invoice invoice = _db.Invoices.SingleOrDefault(x => x.Id == idInvoice);
+            if (checkId != "Approve")
+            {
+                invoice.InvoiceStatusId = Constants.ApprovedInvoiceStatus;
+                invoice.CheckId = checkId;
+                invoice.LedgerSequence = ledgerSequence;
+            }
+            if (rejectButton == "Reject")
+            {
+                invoice.InvoiceStatusId = Constants.RejectedInvoiceStatus;
+            }
+            invoice.InvoiceStatusComments = comments;
+            _db.SaveChanges();
+            return RedirectToAction("Detail", new { id = idInvoice });
+        }
+
 
         [HttpPost]
-        public IActionResult Payed(Guid id)
+        public IActionResult PayRegularInvoice(Guid idInvoice)
         {
-            Invoice invoice = _db.Invoices.SingleOrDefault(x => x.Id == id);
+            Invoice invoice = _db.Invoices.SingleOrDefault(x => x.Id == idInvoice);
             invoice.InvoiceStatusId = Constants.PayedInvoiceStatus;
             _db.SaveChanges();
-            return RedirectToAction("Details", new { id = id });
+            return RedirectToAction("Detail", new { id = idInvoice });
         }
+
+        //[HttpPost]
+        //public IActionResult RedeemInvoice(Guid idInvoice)
+        //{
+        //    Invoice invoice = _db.Invoices.SingleOrDefault(x => x.Id == idInvoice);
+        //    invoice.InvoiceStatusId = Constants.PayedInvoiceStatus;
+        //    _db.SaveChanges();
+        //    return RedirectToAction("Detail", new { id = idInvoice });
+        //}
     }
 }

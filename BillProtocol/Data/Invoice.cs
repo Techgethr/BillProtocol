@@ -36,6 +36,10 @@ namespace BillProtocol.Data
 
         public string? InvoiceStatusComments { get; set; }
 
+        public string? CheckId { get; set; }
+
+        public long? LedgerSequence { get; set; }
+
         [Required]
         public decimal? TotalAmount { get; set; }
 

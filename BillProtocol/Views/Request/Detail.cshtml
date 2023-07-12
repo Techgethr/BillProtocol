@@ -4,6 +4,29 @@
 }
 
 
+@if(Model.Invoice.InvoiceStatusId == Constants.RejectedInvoiceStatus)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    This invoice was rejected by the payer.
+                </div>
+            </div>
+        </div>
+    }
+
+@if(Model.Invoice.InvoiceStatusId == Constants.PayedInvoiceStatus)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    This invoice was payed.
+                </div>
+            </div>
+        </div>
+    }
+
+
 <div class="row">
     <div class="col-12">
         <h2>Invoice details</h2>
@@ -72,15 +95,15 @@
                         <tr>
                             <td>@item.Description</td>
                             <td>@item.Quantity</td>
-                            <td>@Model.Invoice.Currency.Code @(item.UnitPrice.GetValueOrDefault().ToString("N0"))</td>
-                            <td>@(item.Discount.HasValue? Model.Invoice.Currency.Code+" "+ item.Discount.Value.ToString("N0"): "-") </td>
+                            <td>@Model.Invoice.Currency.Code @(item.UnitPrice.GetValueOrDefault().ToString())</td>
+                            <td>@(item.Discount.HasValue? Model.Invoice.Currency.Code+" "+ item.Discount.Value.ToString(): "-") </td>
                             <td>@(item.Tax.HasValue? item.Tax.Value.ToString()+"%": "-")</td>
-                            <td>@Model.Invoice.Currency.Code @item.TotalAmount.GetValueOrDefault().ToString("N0")</td>
+                            <td>@Model.Invoice.Currency.Code @item.TotalAmount.GetValueOrDefault().ToString()</td>
                         </tr>
                     }
                     <tr>
                         <td colspan="5">Total</td>
-                        <td>@Model.Invoice.Currency.Code @Model.Invoice.TotalAmount.GetValueOrDefault().ToString("N0")</td>
+                        <td>@Model.Invoice.Currency.Code @Model.Invoice.TotalAmount.GetValueOrDefault().ToString()</td>
                     </tr>
                 </tbody>
             </table>
@@ -95,3 +118,100 @@
             @Model.Invoice.Memo
         </div>
     </div>
+
+
+
+    @if(Model.Invoice.InvoiceStatusId == Constants.ApprovedInvoiceStatus && Model.Invoice.PaymentDate.Date <= DateTime.Today.Date && Model.Invoice.InvoiceTypeId == Constants.PaymentToDateInvoice && Model.Invoice.UserId == User.Identity.Name)
+    {
+        @using(Html.BeginForm("CashInvoice","Request",FormMethod.Post,new {id = "cashPaymentForm"}))
+        {
+            <div class="row">
+                    
+                <div class="col-6">
+                    Enter the seed code for you wallet <br />
+                    @Model.Invoice.Wallet.Name (address: <b>@Model.Invoice.Wallet.Address</b>) <br />
+                    <input type="hidden" name="successfulPayment" id="successfulPayment"/>
+                    <input type="hidden" name="checkId" id="checkId" value="@Model.Invoice.CheckId" />
+                    <input type="hidden" value="@Model.Invoice.Id" name="idInvoice" id="idInvoice" />
+                    Seed code (XRPL wallet): <input type="password" name="seedCode" id="seedCode" class="form-control" />
+                </div>
+                <div class="col-6">
+                    <input type="button" value="Redeem money" id="redeemMoney" class="btn btn-success btnRedeem" /> <br />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-5 alert alert-danger errorWallet" style="display:none;">
+                    Please, enter the seed code for the wallet to redeem the payment (your seed code is not saved by us). If you have an error, maybe the seed code is not valid for this XRPL address.
+                </div>
+                <div class="col-5 alert alert-danger errorPayment" style="display:none;">
+                    Error when making the payment, it is probable that the issuer of the check does not have a balance to be able to be redeemed.
+                </div>
+                <div class="col-5 alert alert-success successPayment" style="display:none;">
+                    The payment was made successfully.
+                </div>
+                <div class="col-5 alert alert-info waitingPayment" style="display:none;">
+                    The payment is being executed.
+                </div>
+            </div>
+        }
+        
+    }
+
+    @if(Model.Invoice.InvoiceStatusId == Constants.ApprovedInvoiceStatus && Model.Invoice.PaymentDate.Date <= DateTime.Today.Date && Model.Invoice.InvoiceTypeId == Constants.EscrowInvoice && Model.Invoice.UserId == User.Identity.Name)
+    {
+        @using(Html.BeginForm("CashInvoice","Request",FormMethod.Post,new {id = "cashPaymentForm"}))
+        {
+            <div class="row">
+                    
+                <div class="col-6">
+                    Enter the seed code for you wallet <br />
+                    @Model.Invoice.Wallet.Name (address: <b>@Model.Invoice.Wallet.Address</b>) <br />
+                    <input type="hidden" name="successfulPayment" id="successfulPayment"/>
+                    <input type="hidden" name="ledgerSequence" id="ledgerSequence" value="@Model.Invoice.LedgerSequence" />
+                    <input type="hidden" name="checkId" id="checkId" value="@Model.Invoice.CheckId" />
+                    <input type="hidden" value="@Model.Invoice.Id" name="idInvoice" id="idInvoice" />
+                    Seed code (XRPL wallet): <input type="password" name="seedCode" id="seedCode" class="form-control" />
+                </div>
+                <div class="col-6">
+                    <input type="button" value="Redeem money" id="redeemMoney" class="btn btn-success btnRedeemEscrow" /> <br />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-5 alert alert-danger errorWallet" style="display:none;">
+                    Please, enter the seed code for the wallet to redeem the payment (your seed code is not saved by us). If you have an error, maybe the seed code is not valid for this XRPL address.
+                </div>
+                <div class="col-5 alert alert-danger errorPayment" style="display:none;">
+                    Error when making the payment, try again later.
+                </div>
+                <div class="col-5 alert alert-success successPayment" style="display:none;">
+                    The payment was made successfully.
+                </div>
+                <div class="col-5 alert alert-info waitingPayment" style="display:none;">
+                    The payment is being executed.
+                </div>
+            </div>
+        }
+        
+    }
+
+
+@section Scripts
+{
+    <script src="https://unpkg.com/xrpl@2.0.0/build/xrpl-latest-min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.btnRedeem').click(async function () {
+                var seedCode = $('#seedCode').val();
+                await cashMoneyFromPayment('@Model.Invoice.Wallet.Address',seedCode,'@Model.Invoice.Currency.Code',@(Model.Invoice.TotalAmount.Value.ToString("N2").Replace(",",".")),'@Model.Invoice.CheckId')
+            });
+            $('.btnRedeemEscrow').click(async function () {
+                var seedCode = $('#seedCode').val();
+                await cashMoneyFromEscrow('@Model.Invoice.Wallet.Address',seedCode,'@Model.Invoice.Wallet.Address',@Model.Invoice.LedgerSequence)
+                
+            });
+        });
+    </script>
+    
+}

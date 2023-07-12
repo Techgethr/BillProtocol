@@ -84,7 +84,7 @@ namespace BillProtocol.Controllers
             {
                 //TODO
                 decimal totalAmountWithoutTax = ((detail.Quantity.Value * detail.UnitPrice.Value) - detail.Discount.GetValueOrDefault());
-                decimal totalAmountWithTax = totalAmountWithoutTax * (detail.Tax.HasValue? (totalAmountWithoutTax * detail.Tax.GetValueOrDefault() / 100) : 1);
+                decimal totalAmountWithTax = totalAmountWithoutTax + (detail.Tax.HasValue? (totalAmountWithoutTax * detail.Tax.GetValueOrDefault() / 100) : 0);
                 InvoiceDetail invoiceDetail = new InvoiceDetail
                 {
                     Description = detail.Description, Discount = detail.Discount, Id = Guid.NewGuid(),
@@ -106,6 +106,15 @@ namespace BillProtocol.Controllers
         {
             DetailInvoiceViewModel model = new DetailInvoiceViewModel(_db, id);
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult CashInvoice(Guid idInvoice)
+        {
+            Invoice invoice = _db.Invoices.SingleOrDefault(x => x.Id == idInvoice);
+            invoice.InvoiceStatusId = Constants.PayedInvoiceStatus;
+            _db.SaveChanges();
+            return RedirectToAction("Detail", new { id = idInvoice });
         }
 
     }

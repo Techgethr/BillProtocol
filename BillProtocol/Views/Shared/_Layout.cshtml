@@ -22,7 +22,7 @@
             {
                 
                 <li class="breadcrumb-item"><a href="@Url.Action("Index","Request")" class="ml-4 mt-1 btn btn-light btn-sm">Invoices</a></li>
-                <li class="breadcrumb-item"><a href="@Url.Action("Index","Pay")" class="ml-4 mt-1 btn btn-light btn-sm">Pending payments</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Pay")" class="ml-4 mt-1 btn btn-light btn-sm">Received invoices</a></li>
                 <li class="breadcrumb-item"><a href="@Url.Action("Index","Settings")" class="ml-4 mt-1 btn btn-light btn-sm">Settings</a></li>
             }
             
@@ -30,6 +30,11 @@
          </ol>
       </nav>
       <div class="">
+          @if(User.Identity.IsAuthenticated)
+          {
+              <span class="h5" style="color:black;">Hi @User.Identity.Name!</span>
+          }
+
           @await RenderSectionAsync("HeaderSection", required: false)
       </div>
    </header>

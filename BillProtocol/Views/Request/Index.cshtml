@@ -20,6 +20,44 @@
 </div>
 
 <br />
+<div class="row">
+    <div class="col-12">
+        @using (Html.BeginForm(null, null, FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-3">
+                   Start date: @Html.TextBoxFor(x => x.Form.startDate, new {@class="form-control", type="date"})
+                 
+                </div>
+                <div class="col-md-3">
+                    End Date: @Html.TextBoxFor(x => x.Form.endDate, new {@class="form-control", type="date"})
+                </div>
+                <div class="col-md-3">
+                    Type: @Html.DropDownList("Form.invoiceType", Model.Types, "Select a type", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    Currency: @Html.DropDownList("Form.currency", Model.Currencies, "Select a currency", new { @class = "form-control" })
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    Wallet:@Html.DropDownList("Form.wallet", Model.Wallets, "Select a wallet", new { @class = "form-control" })
+                </div>
+                <div class="col-md-4">
+                    Status: @Html.DropDownList("Form.status", Model.Status, "Select a status", new { @class = "form-control" })
+                </div>
+                <div class="col-md-4">
+                    <br />
+                    <input type="submit" value="Filter" class="btn btn-secondary" />
+                </div>
+            </div>
+        }
+    </div>
+            
+
+    </div>
+<br /><br />
 
 <div class="row">
     <div class="col-12">

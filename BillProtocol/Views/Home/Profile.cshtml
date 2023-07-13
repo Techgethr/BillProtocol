@@ -1,0 +1,77 @@
+﻿@model BillProtocol.Models.HomeModel.HomeProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">@ViewData["Title"]</span>
+    </div> 
+    
+}
+
+<br />
+
+<div class="row mt-2 gtr-150">
+            <div class="col-8 col-12-narrower">
+
+                <!-- Content -->
+                <article id="content">
+                    <header>
+                        <h2>My invoices</h2>
+                    </header>
+                    <div class="row">
+                        <div class="col-6">
+                             <p class="alert alert-info alert-dismissible fade show">You have <span class="h4">@Model.PendingInvoices</span> pending invoices</p>
+                    
+                            <a asp-area="" asp-controller="Request" asp-action="Index" class="btn btn-success">See all invoices</a>
+                        </div>
+                        <div class="col-6">
+                             <p class="alert alert-info alert-dismissible fade show">You have <span class="h4">@Model.PayedInvoices</span> payed invoices</p>
+                    
+                            <a asp-area="" asp-controller="Request" asp-action="Index" class="btn btn-success">See all invoices</a>
+                        </div>
+                        <div class="col-6">
+                             <p class="alert alert-info alert-dismissible fade show">You have <span class="h4">@Model.PendingReceivedInvoices</span> pending received invoices</p>
+                    
+                            <a asp-area="" asp-controller="Pay" asp-action="Index" class="btn btn-success">See all received invoices</a>
+                        </div>
+                        
+                    </div>
+
+                   
+                </article>
+
+            </div>
+            <div class="col-4 col-12-narrower">
+
+                <!-- Sidebar -->
+                <section id="sidebar">
+                    <section id="mywallet">
+                        <header>
+                            <h3>Wallets</h3>
+                        </header>
+                        <p class="alert alert-info alert-dismissible fade show">You have <span class="h4">@Model.WalletsQty</span> wallets created for your invoices.</p>
+                        
+
+                        <div class="actions">
+                            <a asp-area="" asp-controller="Settings" asp-action="Index" class="btn btn-info">See all wallets</a>
+                        </div>
+                    </section>
+                    <section>
+                        <header>
+                            <h3>Destinations</h3>
+                        </header>
+                        <p class="alert alert-info alert-dismissible fade show">You have <span class="h4">@Model.DestinationsQty</span>  destinations for your invoices.</p>
+                        
+
+                        <div class="actions">
+                            <a asp-area="" asp-controller="Settings" asp-action="Index" class="btn btn-info">See all destinations</a>
+                        </div>
+
+                    </section>
+                </section>
+
+            </div>
+        </div>

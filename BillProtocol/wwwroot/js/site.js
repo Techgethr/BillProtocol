@@ -46,39 +46,68 @@ async function sendXRPLPayment(seedCode, assetCode, amount, destinationAddress) 
                 }
             }
             else {
-                    const prepared = await client.autofill({
-                        "TransactionType": "Payment",
-                        "Account": originWallet.address,
-                        "Amount": {
-                            "currency": assetCode,
-                            "value": amount,
-                            "issuer": originWallet.address
-                        },
-                        "Destination": destinationAddress
-                    });
-                    const signed = originWallet.sign(prepared);
-                    const tx = await client.submitAndWait(signed.tx_blob);
-                    if (tx.result != null && tx.result.meta != null && tx.result.meta.TransactionResult != null
-                        && tx.result.meta.TransactionResult == "tesSUCCESS") {
-                        $('#successfulPayment').val(true);
-                        $('.errorPayment').css('display', 'none');
-                        $('.errorWallet').css('display', 'none');
-                        $('.successPayment').css('display', 'block');
-                        $('.waitingPayment').css('display', 'none');
-                        $('.btnPay').prop("disabled", false);
-                        //$('#txId').val(tx.result.meta.delivered_amount);
-                        console.log(tx.result.meta);
-                        //$('#secretCodeForm').submit();
+                var found_paths = await client.request({
+                    "command": "ripple_path_find",
+                    "source_account": originWallet.address,
+                    "destination_account": destinationAddress,
+                    "destination_amount": {
+                        "value": amount,
+                        "currency": assetCode,
+                        "issuer": originWallet.address
+                    }
+                });
+                if (found_paths != null && found_paths.result != null && found_paths.result.status == 'success') {
+                    if (found_paths.result.alternatives != null && found_paths.result.alternatives.length > 0) {
+                        const prepared = await client.autofill({
+                            "TransactionType": "Payment",
+                            "Account": originWallet.address,
+                            "Amount": {
+                                "currency": assetCode,
+                                "value": amount,
+                                "issuer": originWallet.address
+                            },
+                            "Destination": destinationAddress
+                        });
+                        const signed = originWallet.sign(prepared);
+                        const tx = await client.submitAndWait(signed.tx_blob);
+                        if (tx.result != null && tx.result.meta != null && tx.result.meta.TransactionResult != null
+                            && tx.result.meta.TransactionResult == "tesSUCCESS") {
+                            $('#successfulPayment').val(true);
+                            $('.errorPayment').css('display', 'none');
+                            $('.errorWallet').css('display', 'none');
+                            $('.successPayment').css('display', 'block');
+                            $('.waitingPayment').css('display', 'none');
+                            $('.btnPay').prop("disabled", false);
+                            //$('#txId').val(tx.result.meta.delivered_amount);
+                            console.log(tx.result.meta);
+                            $('#secretCodeForm').submit();
+                        }
+                        else {
+                            $('#successfulPayment').val(false);
+                            $('.errorPayment').css('display', 'block');
+                            $('.errorWallet').css('display', 'none');
+                            $('.successPayment').css('display', 'none');
+                            $('.waitingPayment').css('display', 'none');
+                            $('.btnPay').prop("disabled", false);
+                        }
                     }
                     else {
-                        $('#successfulPayment').val(false);
-                        $('.errorPayment').css('display', 'block');
-                        $('.errorWallet').css('display', 'none');
+                        $('.errorPayment').css('display', 'none');
+                        $('.errorWallet').css('display', 'block');
+                        $('.errorWallet').text('There is no liquidity path to make the payment in this currency.');
                         $('.successPayment').css('display', 'none');
                         $('.waitingPayment').css('display', 'none');
                         $('.btnPay').prop("disabled", false);
                     }
                 }
+                $('.errorPayment').css('display', 'none');
+                $('.errorWallet').css('display', 'block');
+                $('.errorWallet').text('There is no liquidity path to make the payment in this currency.');
+                $('.successPayment').css('display', 'none');
+                $('.waitingPayment').css('display', 'none');
+                $('.btnPay').prop("disabled", false);
+                    
+             }
             
         }
         else {
@@ -91,6 +120,7 @@ async function sendXRPLPayment(seedCode, assetCode, amount, destinationAddress) 
         
     }
     catch (err) {
+        console.error(err);
         $('.errorPayment').css('display', 'block');
         $('.errorWallet').css('display', 'none');
         $('.successPayment').css('display', 'none');

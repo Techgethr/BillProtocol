@@ -3,6 +3,7 @@ using BillProtocol.Models;
 using BillProtocol.Models.RequestModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BillProtocol.Controllers
 {
@@ -16,10 +17,37 @@ namespace BillProtocol.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(IndexRequestFormModel Form)
         {
             IndexRequestViewModel model = new IndexRequestViewModel(_db, User.Identity.Name);
-            
+            IEnumerable<Invoice> invoices = _db.Invoices.Include(x => x.Wallet).Include(x => x.Destination).Include(x => x.Currency)
+                .Include(x => x.InvoiceStatus).Include(x => x.InvoiceType).Where(x => x.UserId == User.Identity.Name).OrderByDescending(x => x.CreatedAt);
+            if(Form.startDate.HasValue)
+            {
+                invoices = invoices.Where(x => x.CreatedAt >= Form.startDate.Value.Date);
+            }
+            if (Form.endDate.HasValue)
+            {
+                invoices = invoices.Where(x => x.CreatedAt <= Form.endDate.Value.Date);
+            }
+            if(Form.invoiceType.HasValue)
+            {
+                invoices = invoices.Where(x => x.InvoiceTypeId == Form.invoiceType.Value);
+            }
+            if (Form.currency.HasValue)
+            {
+                invoices = invoices.Where(x => x.CurrencyId == Form.currency.Value);
+            }
+            if (Form.wallet.HasValue)
+            {
+                invoices = invoices.Where(x => x.WalletId == Form.wallet.Value);
+            }
+            if (Form.status.HasValue)
+            {
+                invoices = invoices.Where(x => x.InvoiceStatusId == Form.status.Value);
+            }
+            model.Invoices = invoices;
+            model.Form = Form;
             return View(model);
         }
 
@@ -42,6 +70,10 @@ namespace BillProtocol.Controllers
                 if(Form.InvoiceTypeId == Constants.EscrowInvoice && Form.CurrencyId != Constants.XRPCurrency)
                 {
                     ModelState.AddModelError("Form.CurrencyId", "Escrow only allows XRP as a currency.");
+                }
+                if (Form.InvoiceTypeId == Constants.PaymentToDateInvoice && Form.CurrencyId != Constants.XRPCurrency)
+                {
+                    ModelState.AddModelError("Form.CurrencyId", "Payment To Date invoice only allows XRP as a currency.");
                 }
             }
             //TODO: Mejor validación

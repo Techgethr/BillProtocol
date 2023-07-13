@@ -304,7 +304,7 @@
         $(function () {
             $('#payInvoiceXRPL').click(async function () {
                 var seedCode = $('#seedCode').val();
-                await sendXRPLPayment(seedCode,'@Model.Invoice.Currency.Code',@(Model.Invoice.TotalAmount.Value.ToString("N2").Replace(",",".")),'@Model.Invoice.Wallet.Address')
+                await sendXRPLPayment(seedCode,'@Model.Invoice.Currency.Code','@(Model.Invoice.TotalAmount.Value.ToString("N2").Replace(",","."))','@Model.Invoice.Wallet.Address')
                 
             });
             $('.approveCheckBtn').click(async function () {

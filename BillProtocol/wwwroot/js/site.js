@@ -53,7 +53,7 @@ async function sendXRPLPayment(seedCode, assetCode, amount, destinationAddress) 
                     "destination_amount": {
                         "value": amount,
                         "currency": assetCode,
-                        "issuer": originWallet.address
+                        "issuer": 'rPxNfob5qFHHFyinWXNrhJ5dGwbZkbfqun'
                     }
                 });
                 if (found_paths != null && found_paths.result != null && found_paths.result.status == 'success') {
@@ -64,7 +64,7 @@ async function sendXRPLPayment(seedCode, assetCode, amount, destinationAddress) 
                             "Amount": {
                                 "currency": assetCode,
                                 "value": amount,
-                                "issuer": originWallet.address
+                                "issuer": 'rPxNfob5qFHHFyinWXNrhJ5dGwbZkbfqun'
                             },
                             "Destination": destinationAddress
                         });

@@ -1,8 +1,54 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Manage invoices on XRPL";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section HeaderSection 
+{
+    <div class="header-title">
+        <span class="h3">Manage invoices on XRPL Blockchain for B2B and B2C payments</span>
+    </div> 
+    
+}
+
+<br />
+
+<div class="row">
+    <div class="col-6">
+        <div class="alert alert-primary" role="alert">
+            Send invoices and escrows to your customers and users in a few steps.<br />
+            <a class="btn btn-warning" asp-area="Identity" asp-page="/Account/Login">Login</a> &nbsp;&nbsp;&nbsp; <a class="btn btn-info" asp-area="Identity" asp-page="/Account/Register">Register</a>
+       </div>
+    </div>
+    <div class="col-6">
+        <div class="alert alert-secondary" role="alert">
+            With Bill Protocol, you can:
+            <ul>
+                <li>Send and receive invoices</li>
+                <li>Monitor payments</li>
+                <li>Manage wallet and recipients</li>
+                <li>And much more.</li>
+            </ul><br />
+            <a class="btn btn-warning" asp-area="Identity" asp-page="/Account/Login">Login</a> &nbsp;&nbsp;&nbsp; <a class="btn btn-info" asp-area="Identity" asp-page="/Account/Register">Register</a>
+       </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2">
+
+    </div>
+    <div class="col-8">
+        <div class="alert alert-info" role="alert">
+            Type of invoices that you can send/receive:
+            <ul>
+                <li><b>Regular</b> (to request payments in any date)</li>
+                <li><b>Payment to Date</b> (to request payments in a specific date to cash, similar to checks)</li>
+                <li><b>Escrows</b> (to save money in vault until a specific date to cash)</li>
+            </ul> <br />
+            <a class="btn btn-warning" asp-area="Identity" asp-page="/Account/Login">Login</a> &nbsp;&nbsp;&nbsp; <a class="btn btn-info" asp-area="Identity" asp-page="/Account/Register">Register</a>
+       </div>
+    </div>
+    <div class="col-2">
+
+    </div>
 </div>
